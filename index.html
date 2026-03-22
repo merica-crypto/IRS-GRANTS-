@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IRS Payment Release Certificate</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Georgia, serif;
+      background: #e5e7eb;
+      padding: 32px 16px;
+    }
+
+    .page-wrap {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .certificate {
+      background: #fff;
+      border: 4px double #1f2937;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+
+    /* ── HEADER ── */
+    .header {
+      background: #003087;
+      padding: 20px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .header-left { display: flex; align-items: center; gap: 16px; }
+    .seal {
+      width: 64px; height: 64px;
+      background: #fff;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .seal svg { width: 48px; height: 48px; }
+    .agency-text { color: #fff; }
+    .agency-text .dept { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; opacity: 0.8; text-transform: uppercase; }
+    .agency-text .irs  { font-size: 24px; font-weight: 700; letter-spacing: 0.05em; }
+    .agency-text .addr { font-size: 11px; opacity: 0.8; margin-top: 2px; }
+    .header-right { text-align: right; color: #fff; font-size: 11px; opacity: 0.75; line-height: 1.8; }
+
+    /* ── RED BANNER ── */
+    .red-banner {
+      background: #B22234;
+      padding: 8px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .red-banner span { color: #fff; font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+    .red-banner .cert-no { opacity: 0.8; font-weight: 400; letter-spacing: 0.03em; }
+
+    /* ── BODY ── */
+    .body { padding: 28px 32px; }
+
+    /* ── TITLE ── */
+    .title-block { text-align: center; border-bottom: 2px solid #d1d5db; padding-bottom: 20px; margin-bottom: 20px; }
+    .title-block h1 { font-size: 22px; font-weight: 700; color: #111827; letter-spacing: 0.12em; text-transform: uppercase; }
+    .title-block .sub { font-size: 12px; color: #6b7280; margin-top: 4px; }
+    .title-block .meta { font-size: 13px; color: #374151; margin-top: 8px; font-weight: 600; }
+
+    /* ── PAYMENT BANNER ── */
+    .payment-banner {
+      background: #003087;
+      border-radius: 4px;
+      padding: 20px 24px;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .payment-banner .lbl { color: #fff; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.8; margin-bottom: 4px; }
+    .payment-banner .amount { color: #fff; font-size: 40px; font-weight: 700; letter-spacing: 0.04em; }
+    .payment-banner .written { color: #fff; font-size: 11px; opacity: 0.7; margin-top: 4px; letter-spacing: 0.06em; text-transform: uppercase; }
+
+    /* ── PANEL BOXES ── */
+    .panel {
+      border: 2px solid #003087;
+      border-radius: 4px;
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+    .panel-header {
+      background: #003087;
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .panel-header.green { background: #16a34a; justify-content: space-between; }
+    .panel-header h2 { color: #fff; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
+    .panel-header .verified-badge { color: #fff; font-size: 11px; font-weight: 700; opacity: 0.9; }
+    .panel-header svg { width: 16px; height: 16px; fill: #fff; flex-shrink: 0; }
+
+    .panel-body { display: grid; }
+    .panel-body.cols-2 { grid-template-columns: 1fr 1fr; }
+    .panel-body.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+    .panel-col {
+      padding: 16px;
+      border-right: 1px solid #e5e7eb;
+    }
+    .panel-col:last-child { border-right: none; }
+    .panel-col.green-bg { background: #f0fdf4; }
+
+    /* ── FIELD ── */
+    .field { margin-bottom: 10px; }
+    .field:last-child { margin-bottom: 0; }
+    .field .lbl { font-size: 10px; color: #9ca3af; letter-spacing: 0.08em; text-transform: uppercase; display: block; margin-bottom: 2px; }
+    .field .val { font-size: 13px; font-weight: 700; color: #111827; font-family: 'Courier New', monospace; }
+
+    /* ── TWO-COL GRID ── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
+    .box {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 4px;
+      padding: 16px;
+    }
+    .box h2 {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #003087;
+      border-bottom: 1px solid #d1d5db;
+      padding-bottom: 6px;
+      margin-bottom: 12px;
+    }
+
+    /* ── RELEASE TEXT ── */
+    .release-box {
+      background: #eff6ff;
+      border: 1px solid #d1d5db;
+      border-radius: 4px;
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    .release-box h2 {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #003087;
+      border-bottom: 1px solid #d1d5db;
+      padding-bottom: 6px;
+      margin-bottom: 12px;
+    }
+    .release-box p { font-size: 13px; color: #1f2937; line-height: 1.7; }
+    .release-box p + p { margin-top: 12px; }
+
+    /* ── STATUS BADGES ── */
+    .badges { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
+    .badge {
+      border: 1px solid;
+      border-radius: 4px;
+      padding: 12px;
+      text-align: center;
+    }
+    .badge.green { background: #f0fdf4; border-color: #86efac; color: #166534; }
+    .badge.blue  { background: #eff6ff; border-color: #93c5fd; color: #1e40af; }
+    .badge-dot-row { display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 4px; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+    .dot.green { background: #22c55e; }
+    .dot.blue  { background: #3b82f6; }
+    .badge .status { font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
+    .badge .badge-lbl { font-size: 11px; opacity: 0.8; }
+
+    /* ── SIGNATURES ── */
+    .signatures {
+      border-top: 2px solid #d1d5db;
+      padding-top: 20px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 24px;
+    }
+    .sig { text-align: center; }
+    .sig-line { border-bottom: 1px solid #9ca3af; margin-bottom: 6px; height: 40px; }
+    .sig p { font-size: 11px; color: #4b5563; font-weight: 600; }
+    .sig span { font-size: 10px; color: #9ca3af; }
+
+    /* ── NOTICE ── */
+    .notice {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 4px;
+      padding: 12px;
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    .notice svg { width: 16px; height: 16px; fill: #003087; flex-shrink: 0; margin-top: 1px; }
+    .notice p { font-size: 11px; color: #6b7280; line-height: 1.6; }
+
+    /* ── FOOTER ── */
+    .footer {
+      background: #f3f4f6;
+      border-top: 1px solid #d1d5db;
+      padding: 10px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: #9ca3af;
+    }
+
+    /* ── PRINT BUTTON ── */
+    .print-btn-wrap { text-align: center; margin-top: 16px; }
+    .print-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #003087;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 10px 24px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: Georgia, serif;
+    }
+    .print-btn:hover { background: #001f5c; }
+    .print-btn svg { width: 16px; height: 16px; stroke: #fff; fill: none; }
+
+    @media print {
+      body { background: #fff; padding: 0; }
+      .print-btn-wrap { display: none; }
+      .certificate { box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-wrap">
+  <div class="certificate">
+
+    <!-- HEADER -->
+    <div class="header">
+      <div class="header-left">
+        <div class="seal">
+          <svg viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="45" fill="none" stroke="#003087" stroke-width="4"/>
+            <text x="50" y="38" text-anchor="middle" font-size="10" font-weight="bold" fill="#003087" font-family="serif">DEPARTMENT</text>
+            <text x="50" y="50" text-anchor="middle" font-size="10" font-weight="bold" fill="#003087" font-family="serif">OF THE</text>
+            <text x="50" y="62" text-anchor="middle" font-size="10" font-weight="bold" fill="#003087" font-family="serif">TREASURY</text>
+          </svg>
+        </div>
+        <div class="agency-text">
+          <div class="dept">United States Department of the Treasury</div>
+          <div class="irs">Internal Revenue Service</div>
+          <div class="addr">Washington, D.C. 20224</div>
+        </div>
+      </div>
+      <div class="header-right">
+        IRS.GOV<br/>1-800-829-1040
+      </div>
+    </div>
+
+    <!-- RED BANNER -->
+    <div class="red-banner">
+      <span>Official Government Document — Payment Release Certificate</span>
+      <span class="cert-no">Certificate No: IRS-PRC-2024-089341</span>
+    </div>
+
+    <!-- BODY -->
+    <div class="body">
+
+      <!-- TITLE -->
+      <div class="title-block">
+        <h1>Payment Release Certificate</h1>
+        <div class="sub">Issued pursuant to Internal Revenue Code § 6325 — Release of Tax Lien or Discharge of Property</div>
+        <div class="meta">Tax Year: 2024 &nbsp;|&nbsp; Date of Issue: March 22, 2026</div>
+      </div>
+
+      <!-- PAYMENT BANNER -->
+      <div class="payment-banner">
+        <div class="lbl">Total Authorized Payment Amount</div>
+        <div class="amount">$60,000.00 USD</div>
+        <div class="written">Sixty Thousand Dollars and 00/100 — United States Currency</div>
+      </div>
+
+      <!-- PAYMENT & RECIPIENT DETAILS -->
+      <div class="panel" style="margin-bottom:24px;">
+        <div class="panel-header">
+          <h2>Payment &amp; Recipient Details</h2>
+        </div>
+        <div class="panel-body cols-2">
+          <div class="panel-col">
+            <div class="field"><span class="lbl">Recipient Name</span><span class="val">Shirley Ann Beaver</span></div>
+            <div class="field"><span class="lbl">Payment Amount</span><span class="val">$60,000.00 USD</span></div>
+            <div class="field"><span class="lbl">Payment Type</span><span class="val">Federal Tax Refund / Authorized Release</span></div>
+            <div class="field"><span class="lbl">Currency</span><span class="val">United States Dollar (USD)</span></div>
+          </div>
+          <div class="panel-col">
+            <div class="field"><span class="lbl">Account Number</span><span class="val">*****2843</span></div>
+            <div class="field"><span class="lbl">Routing Number</span><span class="val">******8564</span></div>
+            <div class="field"><span class="lbl">Payment Date Authorized</span><span class="val">March 22, 2026</span></div>
+            <div class="field"><span class="lbl">Transaction Reference</span><span class="val">IRS-PRC-2024-089341</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ID.ME VERIFIED SECTION -->
+      <div class="panel" style="border-color:#16a34a; margin-bottom:24px;">
+        <div class="panel-header green">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+            <h2>ID.me Verified Identity — Government-Issued Credential</h2>
+          </div>
+          <span class="verified-badge">IDENTITY VERIFIED ✓</span>
+        </div>
+        <div class="panel-body cols-3">
+          <div class="panel-col green-bg">
+            <div class="field"><span class="lbl">Verified Email (ID.me)</span><span class="val">rodneybeaver787@gmail.com</span></div>
+            <div class="field"><span class="lbl">Verification Platform</span><span class="val">ID.me Government Portal</span></div>
+          </div>
+          <div class="panel-col green-bg">
+            <div class="field"><span class="lbl">Social Security Number</span><span class="val">XXX-XX-3586</span></div>
+            <div class="field"><span class="lbl">Identity Status</span><span class="val">FULLY VERIFIED</span></div>
+          </div>
+          <div class="panel-col green-bg">
+            <div class="field"><span class="lbl">Verification Date</span><span class="val">March 22, 2026</span></div>
+            <div class="field"><span class="lbl">Assurance Level</span><span class="val">IAL2 / AAL2 Compliant</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAXPAYER ID & CERTIFICATE INFO -->
+      <div class="two-col">
+        <div class="box">
+          <h2>Taxpayer Identification</h2>
+          <div class="field"><span class="lbl">Social Security Number</span><span class="val">XXX-XX-3586</span></div>
+          <div class="field"><span class="lbl">Mother Maiden Name</span><span class="val">Shirley Ann Wishon</span></div>
+          <div class="field"><span class="lbl">Father Full Name</span><span class="val">Hubert John Beaver</span></div>
+          <div class="field"><span class="lbl">Mother Full Name</span><span class="val">Shirley Ann Beaver</span></div>
+          <div class="field"><span class="lbl">City of Birth</span><span class="val">Cottage Grove, Oregon</span></div>
+          <div class="field"><span class="lbl">Home Address</span><span class="val">277 Skeenah Highlands Rd., Blairsville, Georgia 30512</span></div>
+        </div>
+        <div class="box">
+          <h2>Certificate Information</h2>
+          <div class="field"><span class="lbl">Certificate Number</span><span class="val">IRS-PRC-2024-089341</span></div>
+          <div class="field"><span class="lbl">Tax Year</span><span class="val">2024</span></div>
+          <div class="field"><span class="lbl">Date of Issue</span><span class="val">March 22, 2026</span></div>
+          <div class="field"><span class="lbl">Issuing Authority</span><span class="val">Internal Revenue Service</span></div>
+          <div class="field"><span class="lbl">Payment Status</span><span class="val">AUTHORIZED FOR RELEASE</span></div>
+        </div>
+      </div>
+
+      <!-- CERTIFICATE OF RELEASE -->
+      <div class="release-box">
+        <h2>Certificate of Release</h2>
+        <p>This certifies that the Internal Revenue Service has authorized the release of <strong>Sixty Thousand Dollars ($60,000.00 USD)</strong> to the recipient <strong>Shirley Ann Beaver</strong>, associated with the above-referenced taxpayer account. All applicable federal tax liabilities for Tax Year 2024 have been satisfied, and this document serves as official authorization for the release of the above-stated payment to the designated recipient. This certificate is issued in accordance with all applicable provisions of the Internal Revenue Code and Treasury Regulations.</p>
+        <p>This document constitutes an official government record. Any unauthorized alteration, reproduction, or misuse of this certificate is a violation of federal law and may result in prosecution under 18 U.S.C. § 1001 and related statutes.</p>
+      </div>
+
+      <!-- STATUS BADGES -->
+      <div class="badges">
+        <div class="badge green">
+          <div class="badge-dot-row"><span class="dot green"></span><span class="status">Verified</span></div>
+          <div class="badge-lbl">Tax Compliance</div>
+        </div>
+        <div class="badge green">
+          <div class="badge-dot-row"><span class="dot green"></span><span class="status">Confirmed</span></div>
+          <div class="badge-lbl">Identity Verification</div>
+        </div>
+        <div class="badge blue">
+          <div class="badge-dot-row"><span class="dot blue"></span><span class="status">Authorized</span></div>
+          <div class="badge-lbl">Payment Status</div>
+        </div>
+        <div class="badge green">
+          <div class="badge-dot-row"><span class="dot green"></span><span class="status">Approved</span></div>
+          <div class="badge-lbl">Funds Release</div>
+        </div>
+      </div>
+
+      <!-- SIGNATURES -->
+      <div class="signatures">
+        <div class="sig">
+          <div class="sig-line"></div>
+          <p>Authorized IRS Officer Signature</p>
+          <span>Internal Revenue Service</span>
+        </div>
+        <div class="sig">
+          <div class="sig-line"></div>
+          <p>Certifying Officer, Department of the Treasury</p>
+          <span>Washington, D.C. 20224</span>
+        </div>
+      </div>
+
+      <!-- NOTICE -->
+      <div class="notice">
+        <svg viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+        <p><strong>Important Notice:</strong> This certificate is issued by the Internal Revenue Service, a bureau of the U.S. Department of the Treasury. For questions regarding this document, please contact the IRS at 1-800-829-1040 or visit <strong>www.irs.gov</strong>. Keep this document for your records. Form IRS-PRC Rev. 03-2024.</p>
+      </div>
+
+    </div><!-- /body -->
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <span>Cat. No. 62133S &nbsp;|&nbsp; www.irs.gov</span>
+      <span>Form PRC (Rev. 3-2024)</span>
+      <span>Department of the Treasury — Internal Revenue Service</span>
+    </div>
+
+  </div><!-- /certificate -->
+
+  <!-- PRINT BUTTON -->
+  <div class="print-btn-wrap">
+    <button class="print-btn" onclick="window.print()">
+      <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2"/>
+        <path d="M9 21h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2z"/>
+        <path d="M17 9V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4"/>
+      </svg>
+      Print / Save as PDF
+    </button>
+  </div>
+
+</div><!-- /page-wrap -->
+
+</body>
+</html>
